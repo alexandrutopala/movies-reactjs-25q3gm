@@ -1,4 +1,5 @@
 import React from 'react';
+import Counter from './components/common/Counter';
 
 function App() {
   return (
@@ -7,9 +8,10 @@ function App() {
         <h1 className="text-5xl font-bold mb-6 text-center">
           Movies App
         </h1>
-        <p className="text-xl text-gray-300 text-center">
+        <p className="text-xl text-gray-300 text-center mb-8">
           Welcome to your TypeScript React Movies Application!
         </p>
+        <Counter initialValue={0} />
       </header>
     </div>
   );
