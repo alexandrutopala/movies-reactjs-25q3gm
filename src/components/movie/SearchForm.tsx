@@ -32,7 +32,7 @@ const SearchForm = ({onSearch}: SearchFormProps) => {
         <input 
             type="text" 
             placeholder='What do you want to watch?' 
-            className='text-black w-full max-w-lg p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 font-montserrat h-10' 
+            className='text-black w-full max-w-lg p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 font-montserrat h-10' 
             onChange={(e) => {
                 setQuery(e.target.value)
             }}
@@ -46,7 +46,7 @@ const SearchForm = ({onSearch}: SearchFormProps) => {
         />
         <button 
             ref={searchButtonRef}
-            className='px-8 bg-red-500 text-white rounded hover:bg-red-600 uppercase font-montserrat font-medium h-10'
+            className='px-8 text-white bg-main-red rounded hover:bg-main-red-600 uppercase font-montserrat font-medium h-10'
             onClick={handleSearch}
         >Search</button>
     </div>
