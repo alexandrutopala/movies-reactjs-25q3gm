@@ -2,10 +2,11 @@ import React, { useState, useRef } from 'react'
 
 interface SearchFormProps {
     onSearch: (query: string) => void
+    initialQuery?: string
 }
 
-const SearchForm = ({onSearch}: SearchFormProps) => {
-  const [query, setQuery] = useState<string>('')
+const SearchForm = ({onSearch, initialQuery = ''}: SearchFormProps) => {
+  const [query, setQuery] = useState<string>(initialQuery)
   const lastSearchedQueryRef = useRef<string>('')
   const searchButtonRef = useRef<HTMLButtonElement>(null)
 
