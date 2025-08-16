@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Counter from './Counter';
 
 describe('Counter', () => {
@@ -12,7 +11,7 @@ describe('Counter', () => {
   test('clicking "decrement" button decrements the displayed value', async () => {
     render(<Counter initialValue={5} />);
 
-    userEvent.click(screen.getByRole('button', { name: /decrement/i }));
+    fireEvent.click(screen.getByRole('button', { name: /decrement/i }));
 
     expect(screen.getByText('4')).toBeInTheDocument();
   });
@@ -20,7 +19,7 @@ describe('Counter', () => {
   test('clicking "increment" button increments the displayed value', async () => {
     render(<Counter initialValue={5} />);
 
-    userEvent.click(screen.getByRole('button', { name: /increment/i }));
+    fireEvent.click(screen.getByRole('button', { name: /increment/i }));
 
     expect(screen.getByText('6')).toBeInTheDocument();
   });
