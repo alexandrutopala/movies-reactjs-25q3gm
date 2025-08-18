@@ -44,3 +44,43 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Testing
+
+### Unit tests (Jest + React Testing Library)
+
+- Run in watch mode:
+
+```bash
+npm test
+```
+
+- Run all tests once (CI-friendly):
+
+```bash
+npm test -- --watchAll=false
+```
+
+Tests live under `src/**/*.test.tsx`.
+
+### End-to-end tests (Cypress)
+
+- Run headless and auto-start the dev server:
+
+```bash
+npm run e2e
+```
+
+- If the app is already running on `http://localhost:3000`, run Cypress headless only:
+
+```bash
+npm run cy:run
+```
+
+- Open the Cypress GUI:
+
+```bash
+npm run cy:open
+```
+
+E2E specs live under `cypress/e2e/*.cy.ts`. The base URL is configured in `cypress.config.ts`.
