@@ -4,6 +4,7 @@ import SearchForm from './components/movie/SearchForm';
 import GenreSelect from './components/movie/GenreSelect';
 import MovieTile from "./components/movie/MovieTile";
 import MovieCard from "./components/movie/MovieCard";
+import SortControl from "./components/common/SortControl";
 
 function App() {
   const [currentGenre, setCurrentGenre] = useState('All');
@@ -53,6 +54,7 @@ function App() {
             }
           }
           />
+        <SortControl options={["Release Date", "Title"]} onChange={(option: string) => console.log(option)} />
       </header>
     </div>
   );

@@ -6,6 +6,7 @@ import { Movie } from '@/types/movie';
 
 describe('MovieTile', () => {
   const mockMovie: Movie = {
+    id: 1,
     name: 'Pulp Fiction',
     releaseYear: 1994,
     genres: ['Crime', 'Drama'],

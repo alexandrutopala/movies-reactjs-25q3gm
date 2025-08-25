@@ -15,6 +15,7 @@ export default meta;
 type Story = StoryObj<typeof MovieTile>;
 
 const mockMovie: Movie = {
+  id: 1,
   name: 'Pulp Fiction',
   releaseYear: 1994,
   genres: ['Crime', 'Drama'],
