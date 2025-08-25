@@ -4,6 +4,7 @@ import GenreSelect from './GenreSelect';
 
 const meta = {
   component: GenreSelect,
+  tags: ['autodocs'],
 } satisfies Meta<typeof GenreSelect>;
 
 export default meta;

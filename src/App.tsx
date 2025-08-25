@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Counter from './components/common/Counter';
 import SearchForm from './components/movie/SearchForm';
 import GenreSelect from './components/movie/GenreSelect';
+import MovieTile from "./components/movie/MovieTile";
 
 function App() {
   const [currentGenre, setCurrentGenre] = useState('All');
@@ -23,6 +24,16 @@ function App() {
           currentGenre={currentGenre}
           onSelect={setCurrentGenre}
         />
+        <MovieTile
+          movie={
+            {
+              name: "Pulp Fiction",
+              releaseYear: 2004,
+              genres: ["Action", "Adventure"],
+              imageUrl: "https://image.tmdb.org/t/p/original/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg"
+            }
+          }
+          onClick={(e) => console.log("clicked")} />
       </header>
     </div>
   );

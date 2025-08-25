@@ -4,6 +4,7 @@ import SearchForm from './SearchForm';
 
 const meta = {
   component: SearchForm,
+  tags: ['autodocs'],
 } satisfies Meta<typeof SearchForm>;
 
 export default meta;
