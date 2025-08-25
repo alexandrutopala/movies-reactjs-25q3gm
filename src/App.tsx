@@ -3,6 +3,7 @@ import Counter from './components/common/Counter';
 import SearchForm from './components/movie/SearchForm';
 import GenreSelect from './components/movie/GenreSelect';
 import MovieTile from "./components/movie/MovieTile";
+import MovieCard from "./components/movie/MovieCard";
 
 function App() {
   const [currentGenre, setCurrentGenre] = useState('All');
@@ -27,13 +28,31 @@ function App() {
         <MovieTile
           movie={
             {
+              id: 1,
               name: "Pulp Fiction",
               releaseYear: 2004,
               genres: ["Action", "Adventure"],
-              imageUrl: "https://image.tmdb.org/t/p/original/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg"
+              imageUrl: "https://image.tmdb.org/t/p/original/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg",
+              rating: 4.8,
+              duration: 154,
+              description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
             }
           }
           onClick={(e) => console.log("clicked")} />
+        <MovieCard
+          movie={
+            {
+              id: 2,
+              name: "Pulp Fiction",
+              releaseYear: 2004,
+              genres: ["Action", "Adventure"],
+              imageUrl: "https://image.tmdb.org/t/p/original/vQWk5YBFWF4bZaofAbv0tShwBvQ.jpg",
+              rating: 4.8,
+              duration: 154,
+              description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
+            }
+          }
+          />
       </header>
     </div>
   );

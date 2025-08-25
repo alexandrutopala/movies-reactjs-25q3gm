@@ -10,6 +10,9 @@ describe('MovieTile', () => {
     releaseYear: 1994,
     genres: ['Crime', 'Drama'],
     imageUrl: '/logo512.png',
+    rating: 4.8,
+    duration: 154,
+    description: 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.',
   };
 
   it('renders movie information correctly', () => {
