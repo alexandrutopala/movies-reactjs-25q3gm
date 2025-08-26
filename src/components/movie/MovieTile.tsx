@@ -43,9 +43,9 @@ const MovieTile = (
             </svg>
           </button>
           {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-10">
-              <button onClick={handleEdit} className="block w-full text-left px-2 py-2 text-sm text-white hover:bg-gray-700">Edit</button>                                                                                                                                                                                                                                               │
-              <button onClick={handleDelete} className="block w-full text-left px-2 py-2 text-sm text-white hover:bg-gray-700">Delete</button>
+            <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg z-10">
+              <button onClick={handleEdit} className="block w-full text-left px-2 py-2 text-sm text-white bg-gray-800 hover:bg-gray-700 rounded-t-md">Edit</button>
+              <button onClick={handleDelete} className="block w-full text-left px-2 py-2 text-sm text-white bg-gray-800 hover:bg-gray-700 rounded-b-md">Delete</button>
             </div>
           )}
         </div>
