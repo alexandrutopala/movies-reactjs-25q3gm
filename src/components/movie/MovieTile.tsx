@@ -1,5 +1,5 @@
 import { Movie } from "@/types/movie";
-import React, { MouseEventHandler, useRef, useState } from "react";
+import React, { MouseEventHandler, useState } from "react";
 
 const MovieTile = (
   { movie, onClick, onEdit, onDelete }: {
