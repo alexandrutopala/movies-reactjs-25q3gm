@@ -7,12 +7,13 @@ interface DialogProps {
   title: string;
   children: React.ReactNode;
   onClose: () => void;
+  _disableFocusTrap?: boolean;
 }
 
-const Dialog: React.FC<DialogProps> = ({ title, children, onClose }) => {
+const Dialog: React.FC<DialogProps> = ({ title, children, onClose, _disableFocusTrap = false }) => {
   return (
     <Portal>
-      <FocusTrap>
+      <FocusTrap active={!_disableFocusTrap}>
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
             <div className="flex justify-between items-center border-b pb-3">

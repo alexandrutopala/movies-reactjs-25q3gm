@@ -108,6 +108,7 @@ const MovieForm: React.FC<MovieFormProps> = ({ movie, onSubmit, onCancel }) => {
         <div>
           <label htmlFor="genres" className="block text-sm font-medium text-red-500 font-montserrat">Genre</label>
           <Select
+            inputId="genres"
             isMulti
             name="genres"
             options={genreOptions}
