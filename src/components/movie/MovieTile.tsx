@@ -1,5 +1,5 @@
 import { Movie } from "@/types/movie";
-import React, { MouseEventHandler, useState } from "react";
+import React, { MouseEventHandler, useRef, useState } from "react";
 
 const MovieTile = (
   { movie, onClick, onEdit, onDelete }: {
@@ -11,6 +11,13 @@ const MovieTile = (
 ) => {
   const [isHovered, setIsHovered] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const imgRef = useRef<HTMLImageElement>(null);
+  const onImageError = () => {
+    if (imgRef.current) {
+      imgRef.current.src = "https://placehold.co/400x600?text=Poster+not+available"
+    }
+  };
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation()
@@ -50,7 +57,7 @@ const MovieTile = (
           )}
         </div>
       )}
-      <img src={movie.imageUrl} alt={movie.name} className="w-full h-auto rounded-md" />
+      <img ref={imgRef} src={movie.imageUrl} alt={movie.name} onError={onImageError} className="w-full h-auto rounded-md" />
       <div className="flex justify-between items-start mt-3">
         <div className="flex flex-col">
           <span className="text-lg font-bold font-montserrat">{movie.name}</span>

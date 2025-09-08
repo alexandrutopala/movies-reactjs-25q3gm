@@ -9,4 +9,7 @@ export interface Movie {
   description: string,
 }
 
-export {}
+export interface MoviePage {
+  totalElements: number,
+  movies: Movie[]
+}
