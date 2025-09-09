@@ -4,8 +4,8 @@ import GenreSelect from '../components/movie/GenreSelect';
 import SortControl from '../components/common/SortControl';
 import MovieTile from '../components/movie/MovieTile';
 import { Movie } from '@/types/movie';
-import { MovieListDto } from "@/types/dto";
 import { FetchMoviesProps, useFetchMovies } from "../hooks/FetchMovies";
+import Pagination from '../components/common/Pagination';
 
 const genres = ['All', 'Documentary', 'Comedy', 'Horror', 'Crime'];
 const sortOptions = ['Release Date', 'Title'];
@@ -20,28 +20,32 @@ const MovieListPage = () => {
   const { moviePage } = useFetchMovies(fetchParams)
 
   const handleSearch = (query: string) => {
-    setFetchParams((prev) => ({ ...prev, titleQuery: (query === "" ? null : query) }))
+    setFetchParams((prev) => ({ ...prev, titleQuery: (query === "" ? null : query), page: 0 }))
   };
 
   const handleGenreSelect = (genre: string) => {
-    setFetchParams((prev) => ({ ...prev, genre: (genre === "All" ? null : genre) }))
+    setFetchParams((prev) => ({ ...prev, genre: (genre === "All" ? null : genre), page: 0 }))
   }
 
   const handleSortChange = (option: string) => {
     switch (option) {
       case 'Release Date':
-        setFetchParams((prev) => ({ ...prev, sortBy: "release_date" }))
+        setFetchParams((prev) => ({ ...prev, sortBy: "release_date", page: 0 }))
         break
       case 'Title':
-        setFetchParams((prev) => ({ ...prev, sortBy: "title" }))
+        setFetchParams((prev) => ({ ...prev, sortBy: "title", page: 0 }))
         break
       default:
-        setFetchParams((prev) => ({ ...prev, sortBy: null }))
+        setFetchParams((prev) => ({ ...prev, sortBy: null, page: 0 }))
     }
   }
 
   const handleMovieClick = (movie: Movie) => {
     console.log('Clicked movie:', movie.name);
+  }
+
+  const handlePageChange = (page: number) => {
+    setFetchParams((prev) => ({...prev, page: page}))
   }
 
   if (!moviePage) {
@@ -88,10 +92,7 @@ const MovieListPage = () => {
           ))}
         </div>
 
-        {/* Pagination Placeholder */}
-        <div className="flex justify-center mt-12">
-            <p className="text-gray-500">Pagination coming soon...</p>
-        </div>
+        <Pagination currentPage={moviePage.currentPage} totalPages={moviePage.totalPages} onPageChange={handlePageChange} />
       </main>
     </div>
   )

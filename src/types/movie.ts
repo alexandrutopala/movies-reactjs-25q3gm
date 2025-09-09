@@ -11,5 +11,7 @@ export interface Movie {
 
 export interface MoviePage {
   totalElements: number,
+  currentPage: number,
+  totalPages: number,
   movies: Movie[]
 }

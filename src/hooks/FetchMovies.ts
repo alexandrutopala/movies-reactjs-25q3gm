@@ -22,7 +22,7 @@ export const useFetchMovies = (params: FetchMoviesProps) => {
     let parsedUrl = baseUrl
 
     if (params.page) {
-      parsedUrl += `&offset=${params.page * pageSize}`
+      parsedUrl += `&offset=${Math.max(params.page, 0) * pageSize}`
     }
 
     if (params.sortBy) {
@@ -61,9 +61,13 @@ export const useFetchMovies = (params: FetchMoviesProps) => {
           duration: m.runtime
         } satisfies Movie))
 
+        const totalPages = Math.ceil(response.totalAmount / pageSize)
+
         return {
           movies: parsedMovies,
-          totalElements: response.totalAmount
+          totalElements: response.totalAmount,
+          totalPages: totalPages,
+          currentPage: params.page && params.page > 0 ? Math.min(params.page, totalPages - 1) : 0
         } satisfies MoviePage
       })
       .then(moviePage => {
