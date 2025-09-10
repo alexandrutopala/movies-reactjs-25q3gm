@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchForm from '../components/movie/SearchForm';
 import GenreSelect from '../components/movie/GenreSelect';
 import SortControl from '../components/common/SortControl';
@@ -7,19 +7,40 @@ import { Movie } from '@/types/movie';
 import { FetchMoviesProps, useFetchMovies } from "../hooks/FetchMovies";
 import Pagination from '../components/common/Pagination';
 import MovieCard from "../components/movie/MovieCard";
+import { useSearchParams } from "react-router";
 
 const genres = ['All', 'Documentary', 'Comedy', 'Horror', 'Crime'];
 const sortOptions = ['Release Date', 'Title'];
 
 const MovieListPage = () => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams()
   const [fetchParams, setFetchParams] = useState<FetchMoviesProps>({
-    page: 0,
-    sortBy: "release_date",
-    genre: null,
-    titleQuery: null
+    page: parseInt(searchParams.get("page") ?? "0", 10),
+    sortBy: searchParams.get("sortBy") as "release_date" | "title" | null ?? "release_date",
+    genre: searchParams.get("genre"),
+    titleQuery: searchParams.get("title"),
   })
   const { moviePage } = useFetchMovies(fetchParams)
+
+  useEffect(() => {
+    const newSearchParams: { [key: string]: string } = {};
+
+    if (fetchParams.titleQuery) {
+      newSearchParams.title = fetchParams.titleQuery;
+    }
+    if (fetchParams.genre) {
+      newSearchParams.genre = fetchParams.genre;
+    }
+    if (fetchParams.sortBy) {
+      newSearchParams.sortBy = fetchParams.sortBy;
+    }
+    if (fetchParams.page && fetchParams.page > 0) {
+      newSearchParams.page = fetchParams.page.toString();
+    }
+
+    setSearchParams(newSearchParams);
+  }, [fetchParams, setSearchParams]);
 
   const handleSearch = (query: string) => {
     setFetchParams((prev) => ({ ...prev, titleQuery: (query === "" ? null : query), page: 0 }))
