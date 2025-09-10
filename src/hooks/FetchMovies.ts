@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Movie, MoviePage } from "@/types/movie";
 import { MovieListDto } from "@/types/dto";
 
@@ -46,8 +46,9 @@ export const useFetchMovies = (params: FetchMoviesProps) => {
 
   useEffect(() => {
     setLoading(true)
+    const abortController = new AbortController()
 
-    fetch(url)
+    fetch(url, { signal: abortController.signal })
       .then(res => res.json())
       .then((response: {totalAmount: number, data: MovieListDto[]}) => {
         const parsedMovies = response.data.map(m => ({
@@ -75,10 +76,15 @@ export const useFetchMovies = (params: FetchMoviesProps) => {
         setMoviePage(moviePage)
       })
       .catch((error: Error) => {
+        if (error.name === 'AbortError') return
         setError(error.message)
         setMoviePage(null)
       })
       .finally(() => setLoading(false))
+
+    return () => {
+      abortController.abort()
+    }
   }, [url])
 
   return { moviePage, loading, error }

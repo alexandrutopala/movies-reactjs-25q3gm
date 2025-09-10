@@ -84,7 +84,7 @@ const MovieListPage = () => {
                 Find your movie
               </h1>
               <div className="w-full max-w-3xl">
-                <SearchForm onSearch={handleSearch}/>
+                <SearchForm onSearch={handleSearch} initialQuery={fetchParams.titleQuery ?? undefined}/>
               </div>
             </div>
           </header>
