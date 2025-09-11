@@ -8,6 +8,7 @@ import { FetchMoviesProps, useFetchMovies } from "../hooks/FetchMovies";
 import Pagination from '../components/common/Pagination';
 import MovieCard from "../components/movie/MovieCard";
 import { useSearchParams } from "react-router";
+import { SearchMovieCard } from "../components/movie/SearchMovieCard";
 
 const genres = ['All', 'Documentary', 'Comedy', 'Horror', 'Crime'];
 const sortOptions = ['Release Date', 'Title'];
@@ -80,35 +81,9 @@ const MovieListPage = () => {
       {/* Header with background */}
       {
         selectedMovie ? (
-          <div className="w-full h-auto relative p-8 bg-gray-900">
-            <button
-              onClick={() => setSelectedMovie(null)}
-              className="absolute top-5 right-5 bg-gray-700 hover:bg-gray-600 text-white rounded-full p-2 z-20"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <MovieCard movie={selectedMovie} />
-          </div>
+          <MovieCard movie={selectedMovie} onDismiss={() => setSelectedMovie(null)} />
         ) : (
-          <header className="relative bg-cover bg-center bg-no-repeat h-96"
-                  style={{ backgroundImage: "url('https://www.themoviedb.org/t/p/original/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg')" }}>
-            <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-            <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
-              <div className="absolute top-5 right-5">
-                <button className="bg-main-red text-white uppercase px-4 py-2 rounded">
-                  + Add Movie
-                </button>
-              </div>
-              <h1 className="text-5xl font-thin uppercase tracking-widest mb-8">
-                Find your movie
-              </h1>
-              <div className="w-full max-w-3xl">
-                <SearchForm onSearch={handleSearch} initialQuery={fetchParams.titleQuery ?? undefined}/>
-              </div>
-            </div>
-          </header>
+          <SearchMovieCard onSearch={handleSearch} initialQuery={fetchParams.titleQuery}/>
         )
       }
 
