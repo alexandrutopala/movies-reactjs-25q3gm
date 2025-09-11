@@ -1,16 +1,61 @@
 import React from 'react';
 import MovieListPage from './pages/MovieListPage';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
+import { Movie } from "./types/movie";
+import MovieCard from "./components/movie/MovieCard";
+import { SearchMovieCard } from "./components/movie/SearchMovieCard";
+import { MovieListDto, toMovie } from "./types/dto";
+
+
+const movieLoader = async ({ params }: { params: { movieId?: string } }): Promise<Movie | null> => {
+  if (!params.movieId) {
+    return null;
+  }
+  try {
+    const response = await fetch(`http://localhost:4000/movies/${params.movieId}`);
+    if (response.ok) {
+      const movieDto: MovieListDto = await response.json()
+      return toMovie(movieDto)
+    }
+    return null;
+  } catch (error) {
+    console.error("Failed to fetch movie", error);
+    return null;
+  }
+};
+
+const SearchWrapper = () => {
+  const { onSearch, initialQuery } = useOutletContext<{ onSearch: (query: string) => void; initialQuery: string | null; }>();
+  return <SearchMovieCard onSearch={onSearch} initialQuery={initialQuery} />;
+};
+
+const MovieDetails = () => {
+  const movie = useLoaderData() as Movie
+  const navigate = useNavigate()
+
+  return <MovieCard movie={movie} onDismiss={() => navigate('..')} />
+};
 
 const router = createBrowserRouter([
   {
-    element: <MovieListPage/>,
     path: "/",
-  }
-])
+    element: <MovieListPage />,
+    children: [
+      {
+        index: true,
+        element: <SearchWrapper />,
+      },
+      {
+        path: ":movieId",
+        element: <MovieDetails />,
+        loader: movieLoader,
+      },
+    ],
+  },
+]);
 
 function App() {
-  return <RouterProvider router={router}/>
+  return <RouterProvider router={router} />;
 }
 
 export default App;

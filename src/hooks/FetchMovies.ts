@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { Movie, MoviePage } from "@/types/movie";
-import { MovieListDto } from "@/types/dto";
+import { useEffect, useState } from "react";
+import { MoviePage } from "../types/movie";
+import { MovieListDto, toMovie } from "../types/dto";
 
 export interface FetchMoviesProps {
   page: number | null,
@@ -51,16 +51,7 @@ export const useFetchMovies = (params: FetchMoviesProps) => {
     fetch(url, { signal: abortController.signal })
       .then(res => res.json())
       .then((response: {totalAmount: number, data: MovieListDto[]}) => {
-        const parsedMovies = response.data.map(m => ({
-          id: m.id,
-          name: m.title,
-          releaseYear: parseInt(m.release_date.slice(0, 4), 10),
-          imageUrl: m.poster_path,
-          rating: m.vote_average,
-          genres: m.genres,
-          description: m.overview,
-          duration: m.runtime
-        } satisfies Movie))
+        const parsedMovies = response.data.map(m => toMovie(m))
 
         const totalPages = Math.ceil(response.totalAmount / pageSize)
 

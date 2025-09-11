@@ -1,12 +1,19 @@
 import { Movie } from "@/types/movie";
-import React from "react";
+import React, { useRef } from "react";
 
 const MovieCard = ({ movie, onDismiss }: { movie: Movie, onDismiss?: () => void }) => {
   const formatDuration = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}m`;
-  };
+  }
+
+  const imgRef = useRef<HTMLImageElement>(null)
+  const onImageError = () => {
+    if (imgRef.current) {
+      imgRef.current.src = "https://placehold.co/400x600?text=Poster+not+available"
+    }
+  }
 
   return (
     <div className="w-full h-auto relative p-8 bg-gray-900 flex rounded-lg text-white font-montserrat">
@@ -19,7 +26,7 @@ const MovieCard = ({ movie, onDismiss }: { movie: Movie, onDismiss?: () => void 
         </svg>
       </button>
       <div className="flex-shrink-0" style={{width: '300px'}}>
-        <img src={movie.imageUrl} alt={movie.name} className="w-full h-auto rounded-md" />
+        <img src={movie.imageUrl} alt={movie.name} ref={imgRef} onError={onImageError} className="w-full h-auto rounded-md" />
       </div>
       <div className="pl-6 flex flex-col">
         <div className="flex items-center mb-2">
@@ -38,7 +45,7 @@ const MovieCard = ({ movie, onDismiss }: { movie: Movie, onDismiss?: () => void 
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default MovieCard;

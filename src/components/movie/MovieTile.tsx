@@ -12,12 +12,12 @@ const MovieTile = (
   const [isHovered, setIsHovered] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const imgRef = useRef<HTMLImageElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null)
   const onImageError = () => {
     if (imgRef.current) {
       imgRef.current.src = "https://placehold.co/400x600?text=Poster+not+available"
     }
-  };
+  }
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation()
