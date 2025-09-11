@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MovieListPage from './pages/MovieListPage';
 import { createBrowserRouter, RouterProvider, useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
 import { Movie } from "./types/movie";
@@ -24,16 +24,26 @@ const movieLoader = async ({ params }: { params: { movieId?: string } }): Promis
   }
 };
 
-const SearchWrapper = () => {
+const SearchMovieWrapper = () => {
   const { onSearch, initialQuery } = useOutletContext<{ onSearch: (query: string) => void; initialQuery: string | null; }>();
   return <SearchMovieCard onSearch={onSearch} initialQuery={initialQuery} />;
 };
 
-const MovieDetails = () => {
-  const movie = useLoaderData() as Movie
-  const navigate = useNavigate()
+const MovieCardWrapper = () => {
+  const movie = useLoaderData() as Movie | null;
+  const navigate = useNavigate();
 
-  return <MovieCard movie={movie} onDismiss={() => navigate('..')} />
+  useEffect(() => {
+    if (movie === null) {
+      navigate('..', { replace: true });
+    }
+  }, [movie, navigate]);
+
+  if (movie === null) {
+    return null;
+  }
+
+  return <MovieCard movie={movie} onDismiss={() => navigate('..')} />;
 };
 
 const router = createBrowserRouter([
@@ -43,11 +53,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <SearchWrapper />,
+        element: <SearchMovieWrapper />,
       },
       {
         path: ":movieId",
-        element: <MovieDetails />,
+        element: <MovieCardWrapper />,
         loader: movieLoader,
       },
     ],
