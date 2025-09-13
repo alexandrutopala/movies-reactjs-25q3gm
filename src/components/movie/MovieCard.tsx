@@ -16,7 +16,7 @@ const MovieCard = ({ movie, onDismiss }: { movie: Movie, onDismiss?: () => void 
   }
 
   return (
-    <div className="w-full h-auto relative p-8 bg-gray-900 flex rounded-lg text-white font-montserrat">
+    <div className="w-full h-auto relative p-8 bg-gray-900 flex rounded-lg text-white font-montserrat" data-cy="movie-card">
       <button
         onClick={onDismiss}
         className="absolute top-5 right-5 bg-gray-700 hover:bg-gray-600 text-white rounded-full p-2 z-20"

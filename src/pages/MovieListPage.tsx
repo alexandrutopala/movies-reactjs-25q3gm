@@ -7,7 +7,7 @@ import { FetchMoviesProps, useFetchMovies } from "../hooks/FetchMovies";
 import Pagination from '../components/common/Pagination';
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
 
-const genres = ['All', 'Documentary', 'Comedy', 'Horror', 'Crime'];
+const genres = ['All', 'Action', 'Documentary', 'Comedy', 'Horror', 'Crime'];
 const sortOptions = ['Release Date', 'Title'];
 
 const MovieListPage = () => {
@@ -19,7 +19,7 @@ const MovieListPage = () => {
     genre: searchParams.get("genre"),
     titleQuery: searchParams.get("title"),
   });
-  const { moviePage } = useFetchMovies(fetchParams);
+  const { moviePage, error, loading } = useFetchMovies(fetchParams);
 
   useEffect(() => {
     const newSearchParams: { [key: string]: string } = {};
@@ -41,7 +41,7 @@ const MovieListPage = () => {
   }, [fetchParams, setSearchParams]);
 
   const handleSearch = (query: string) => {
-    setFetchParams((prev) => ({ ...prev, titleQuery: (query === "" ? null : query), page: 0 }));
+    setFetchParams((prev) => ({ ...prev, titleQuery: (!query ? null : query), page: 0 }));
   };
 
   const handleGenreSelect = (genre: string) => {
@@ -69,10 +69,6 @@ const MovieListPage = () => {
     setFetchParams((prev) => ({ ...prev, page: page }));
   };
 
-  if (!moviePage) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className="bg-gray-800 text-white min-h-screen font-montserrat">
       <Outlet context={{ onSearch: handleSearch, initialQuery: fetchParams.titleQuery }} />
@@ -83,21 +79,28 @@ const MovieListPage = () => {
           <SortControl options={sortOptions} onChange={handleSortChange} />
         </div>
 
-        <p className="text-gray-400 mb-6">
-          <span className="font-bold">{moviePage.totalElements}</span> movies found
-        </p>
+        {loading && <p>Loading movies...</p>}
+        {error && <p className="text-red-500">Error: {error}</p>}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {moviePage.movies.map(movie => (
-            <MovieTile key={movie.id} movie={movie} onClick={() => handleMovieClick(movie)} />
-          ))}
-        </div>
+        {moviePage && (
+          <>
+            <p className="text-gray-400 mb-6">
+              <span className="font-bold">{moviePage.totalElements}</span> movies found
+            </p>
 
-        <Pagination
-          currentPage={moviePage.currentPage}
-          totalPages={moviePage.totalPages}
-          onPageChange={handlePageChange}
-        />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {moviePage.movies.map(movie => (
+                <MovieTile key={movie.id} movie={movie} onClick={() => handleMovieClick(movie)} />
+              ))}
+            </div>
+
+            <Pagination
+              currentPage={moviePage.currentPage}
+              totalPages={moviePage.totalPages}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
       </main>
     </div>
   );

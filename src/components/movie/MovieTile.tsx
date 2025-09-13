@@ -41,6 +41,7 @@ const MovieTile = (
          onClick={onClick}
          onMouseEnter={e => setIsHovered(true)}
          onMouseLeave={e => { setIsHovered(false); setIsMenuOpen(false); }}
+         data-cy="movie-list"
     >
       {isHovered && (
         <div className="absolute top-2 right-2 bg-gray-800 rounded-full p-1">
