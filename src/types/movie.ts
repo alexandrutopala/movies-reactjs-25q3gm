@@ -9,4 +9,9 @@ export interface Movie {
   description: string,
 }
 
-export {}
+export interface MoviePage {
+  totalElements: number,
+  currentPage: number,
+  totalPages: number,
+  movies: Movie[]
+}
