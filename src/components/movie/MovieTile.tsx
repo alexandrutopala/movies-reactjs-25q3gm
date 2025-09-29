@@ -12,12 +12,12 @@ const MovieTile = (
   const [isHovered, setIsHovered] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const imgRef = useRef<HTMLImageElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null)
   const onImageError = () => {
     if (imgRef.current) {
       imgRef.current.src = "https://placehold.co/400x600?text=Poster+not+available"
     }
-  };
+  }
 
   const handleEdit: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation()
@@ -41,6 +41,7 @@ const MovieTile = (
          onClick={onClick}
          onMouseEnter={e => setIsHovered(true)}
          onMouseLeave={e => { setIsHovered(false); setIsMenuOpen(false); }}
+         data-cy="movie-list"
     >
       {isHovered && (
         <div className="absolute top-2 right-2 bg-gray-800 rounded-full p-1">

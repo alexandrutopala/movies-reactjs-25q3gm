@@ -1,17 +1,32 @@
 import { Movie } from "@/types/movie";
-import React from "react";
+import React, { useRef } from "react";
 
-const MovieCard = ({ movie }: { movie: Movie }) => {
+const MovieCard = ({ movie, onDismiss }: { movie: Movie, onDismiss?: () => void }) => {
   const formatDuration = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
     return `${hours}h ${remainingMinutes}m`;
-  };
+  }
+
+  const imgRef = useRef<HTMLImageElement>(null)
+  const onImageError = () => {
+    if (imgRef.current) {
+      imgRef.current.src = "https://placehold.co/400x600?text=Poster+not+available"
+    }
+  }
 
   return (
-    <div className="flex p-4 bg-gray-800 rounded-lg text-white font-montserrat">
+    <div className="w-full h-auto relative p-8 bg-gray-900 flex rounded-lg text-white font-montserrat" data-cy="movie-card">
+      <button
+        onClick={onDismiss}
+        className="absolute top-5 right-5 bg-gray-700 hover:bg-gray-600 text-white rounded-full p-2 z-20"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
       <div className="flex-shrink-0" style={{width: '300px'}}>
-        <img src={movie.imageUrl} alt={movie.name} className="w-full h-auto rounded-md" />
+        <img src={movie.imageUrl} alt={movie.name} ref={imgRef} onError={onImageError} className="w-full h-auto rounded-md" />
       </div>
       <div className="pl-6 flex flex-col">
         <div className="flex items-center mb-2">
@@ -30,7 +45,7 @@ const MovieCard = ({ movie }: { movie: Movie }) => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
 export default MovieCard;
