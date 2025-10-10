@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import MovieForm from './MovieForm';
 import { Movie } from '@/types/movie';
 
@@ -36,11 +36,13 @@ describe('MovieForm', () => {
     expect(screen.getByLabelText('Overview')).toHaveValue(movie.description);
   });
 
-  it('calls onSubmit with form data when submitted', () => {
+  it('calls onSubmit with form data when submitted', async () => {
     const handleSubmit = jest.fn();
     render(<MovieForm movie={movie} onSubmit={handleSubmit} onCancel={() => {}} />);
     fireEvent.click(screen.getByText('Submit'));
-    expect(handleSubmit).toHaveBeenCalledWith(movie);
+    await waitFor(() => {
+      expect(handleSubmit).toHaveBeenCalledWith(movie);
+    });
   });
 
   it('calls onCancel when the cancel button is clicked', () => {

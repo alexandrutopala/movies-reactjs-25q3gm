@@ -27,3 +27,20 @@ export function toMovie(m: MovieListDto): Movie {
     duration: m.runtime
   } satisfies Movie
 }
+
+export function toMovieDto(m: Movie): MovieListDto {
+  return {
+    id: m.id,
+    title: m.name,
+    release_date: m.releaseYear.toString(),
+    poster_path: m.imageUrl,
+    vote_average: m.rating,
+    vote_count: 1,
+    tagline: m.name,
+    overview: m.description,
+    budget: 10,
+    revenue: 10,
+    genres: m.genres,
+    runtime: m.duration
+  } satisfies MovieListDto
+}
