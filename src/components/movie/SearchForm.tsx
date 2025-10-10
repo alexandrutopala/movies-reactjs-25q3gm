@@ -1,13 +1,13 @@
 import React, { useState, useRef } from 'react'
 
 interface SearchFormProps {
-    onSearch: (query: string) => void
-    initialQuery?: string
+  onSearch: (query: string) => void
+  initialQuery?: string
 }
 
-const SearchForm = ({onSearch, initialQuery = ''}: SearchFormProps) => {
+const SearchForm = ({ onSearch, initialQuery = '' }: SearchFormProps) => {
   const [query, setQuery] = useState<string>(initialQuery)
-  const lastSearchedQueryRef = useRef<string>('')
+  const lastSearchedQueryRef = useRef<string>(initialQuery)
   const searchButtonRef = useRef<HTMLButtonElement>(null)
 
   const handleSearch = () => {
@@ -21,7 +21,7 @@ const SearchForm = ({onSearch, initialQuery = ''}: SearchFormProps) => {
     if (e.relatedTarget === searchButtonRef.current) {
       return
     }
-    
+
     if (query !== lastSearchedQueryRef.current) {
       onSearch(query)
       lastSearchedQueryRef.current = query
@@ -30,26 +30,29 @@ const SearchForm = ({onSearch, initialQuery = ''}: SearchFormProps) => {
 
   return (
     <div className='flex justify-center items-center space-x-4 font-montserrat'>
-        <input 
-            type="text" 
-            placeholder='What do you want to watch?' 
-            className='text-black w-full max-w-lg p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 font-montserrat h-10' 
-            onChange={(e) => {
-                setQuery(e.target.value)
-            }}
-            value={query}
-            onBlur={handleBlur}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                    handleSearch()
-                }
-            }}
-        />
-        <button 
-            ref={searchButtonRef}
-            className='px-8 text-white bg-main-red rounded hover:bg-main-red-600 uppercase font-montserrat font-medium h-10'
-            onClick={handleSearch}
-        >Search</button>
+      <input
+        type="text"
+        placeholder='What do you want to watch?'
+        className='text-black w-full max-w-lg p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 font-montserrat h-10'
+        onChange={(e) => {
+          setQuery(e.target.value)
+        }}
+        value={query}
+        onBlur={handleBlur}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleSearch()
+          }
+        }}
+        data-cy='search-input'
+      />
+      <button
+        ref={searchButtonRef}
+        className='px-8 text-white bg-main-red rounded hover:bg-main-red-600 uppercase font-montserrat font-medium h-10'
+        onClick={handleSearch}
+        data-cy='search-button'
+      >Search
+      </button>
     </div>
   )
 }
