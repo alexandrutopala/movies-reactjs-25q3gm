@@ -6,7 +6,7 @@ import { Movie } from '@/types/movie';
 import { FetchMoviesProps, useFetchMovies } from "../hooks/FetchMovies";
 import Pagination from '../components/common/Pagination';
 import { Outlet, useNavigate, useSearchParams } from "react-router-dom";
-
+import { toMovieDto } from '../types/dto';
 const genres = ['All', 'Action', 'Documentary', 'Comedy', 'Horror', 'Crime'];
 const sortOptions = ['Release Date', 'Title'];
 
@@ -69,9 +69,57 @@ const MovieListPage = () => {
     setFetchParams((prev) => ({ ...prev, page: page }));
   };
 
+  const handleAddMovie = async (movie: Movie) => {
+    const movieDto = toMovieDto(movie)
+    const movieDtoWithoutId = { ...movieDto, id: undefined }
+    try {
+      const response = await fetch('http://localhost:4000/movies', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(movieDtoWithoutId),
+      });
+      
+      if (response.ok) {
+        // Refresh the movie list by resetting fetch params
+        setFetchParams((prev) => ({ ...prev }));
+      } else {
+        console.error('Failed to add movie');
+      }
+    } catch (error) {
+      console.error('Error adding movie:', error);
+    }
+  };
+
+  const handleDeleteMovie = async (movie: Movie) => {
+    try {
+      await fetch(`http://localhost:4000/movies/${movie.id}`, {
+        method: 'DELETE',
+      });
+    } catch (error) {
+      console.error('Error deleting movie:', error);
+    }
+  };
+
+  const handleEditMovie = async (movie: Movie) => {
+    const movieDto = toMovieDto(movie)
+    try {
+      await fetch(`http://localhost:4000/movies/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(movieDto),
+      });
+    } catch (error) {
+      console.error('Error editing movie:', error);
+    }
+  };
+
   return (
     <div className="bg-gray-800 text-white min-h-screen font-montserrat">
-      <Outlet context={{ onSearch: handleSearch, initialQuery: fetchParams.titleQuery }} />
+      <Outlet context={{ onSearch: handleSearch, initialQuery: fetchParams.titleQuery, onAddMovie: handleAddMovie }} />
 
       <main className="container mx-auto px-8 py-8">
         <div className="flex justify-between items-center mb-6 border-b-2 border-gray-700 pb-4">
@@ -90,7 +138,7 @@ const MovieListPage = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {moviePage.movies.map(movie => (
-                <MovieTile key={movie.id} movie={movie} onClick={() => handleMovieClick(movie)} />
+                <MovieTile key={movie.id} movie={movie} onClick={() => handleMovieClick(movie)} onEdit={handleEditMovie} onDelete={handleDeleteMovie} />
               ))}
             </div>
 

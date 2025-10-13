@@ -25,8 +25,12 @@ const movieLoader = async ({ params }: { params: { movieId?: string } }): Promis
 };
 
 const SearchMovieWrapper = () => {
-  const { onSearch, initialQuery } = useOutletContext<{ onSearch: (query: string) => void; initialQuery: string | null; }>();
-  return <SearchMovieCard onSearch={onSearch} initialQuery={initialQuery} />;
+  const { onSearch, initialQuery, onAddMovie } = useOutletContext<{ 
+    onSearch: (query: string) => void; 
+    initialQuery: string | null;
+    onAddMovie: (movie: Movie) => void;
+  }>();
+  return <SearchMovieCard onSearch={onSearch} initialQuery={initialQuery} onAddMovie={onAddMovie} />;
 };
 
 const MovieCardWrapper = () => {

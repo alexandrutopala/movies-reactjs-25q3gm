@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { Movie } from '@/types/movie';
 
@@ -61,70 +62,139 @@ const customStyles = {
 };
 
 const MovieForm: React.FC<MovieFormProps> = ({ movie, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState<Movie>(movie || {
-    id: 0,
-    name: '',
-    releaseYear: new Date().getFullYear(),
-    imageUrl: '',
-    rating: 0,
-    genres: [],
-    duration: 0,
-    description: '',
+  const { 
+    register, 
+    handleSubmit, 
+    control, 
+    formState: { errors } 
+  } = useForm<Movie>({
+    mode: 'onBlur',
+    defaultValues: movie || {
+      id: 0,
+      name: '',
+      releaseYear: new Date().getFullYear(),
+      imageUrl: '',
+      rating: 0,
+      genres: [],
+      duration: 0,
+      description: '',
+    }
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleGenreChange = (selectedOptions: any) => {
-    setFormData(prev => ({ ...prev, genres: selectedOptions.map((option: any) => option.value) }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
+  const onSubmitForm = (data: Movie) => {
+    onSubmit(data);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-gray-800 text-white rounded-lg">
+    <form onSubmit={handleSubmit(onSubmitForm)} className="p-4 bg-gray-800 text-white rounded-lg">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-red-500 font-montserrat">Title</label>
-          <input type="text" name="name" id="name" value={formData.name} onChange={handleChange} className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" placeholder="Moana" />
+          <input 
+            type="text" 
+            id="name" 
+            {...register('name', { required: 'Title is required' })} 
+            className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" 
+            placeholder="Moana" 
+          />
+          {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name.message}</p>}
         </div>
         <div>
           <label htmlFor="releaseYear" className="block text-sm font-medium text-red-500 font-montserrat">Release Date</label>
-          <input type="number" min="1850" max="2100" name="releaseYear" id="releaseYear" value={movie && formData.releaseYear} onChange={handleChange} placeholder="2015" className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" />
+          <input 
+            type="number" 
+            id="releaseYear" 
+            {...register('releaseYear', { 
+              required: 'Release year is required',
+              min: { value: 1850, message: 'Year must be 1850 or later' },
+              max: { value: 2100, message: 'Year must be 2100 or earlier' },
+              valueAsNumber: true
+            })} 
+            placeholder="2015" 
+            className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" 
+          />
+          {errors.releaseYear && <p className="mt-1 text-xs text-red-400">{errors.releaseYear.message}</p>}
         </div>
         <div>
           <label htmlFor="imageUrl" className="block text-sm font-medium text-red-500 font-montserrat">Movie URL</label>
-          <input type="url" name="imageUrl" id="imageUrl" value={formData.imageUrl} onChange={handleChange} placeholder="https://" className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" />
+          <input 
+            type="url" 
+            id="imageUrl" 
+            {...register('imageUrl', { 
+              required: 'Movie URL is required',
+              pattern: {
+                value: /^https?:\/\/.+/,
+                message: 'Please enter a valid URL'
+              }
+            })} 
+            placeholder="https://" 
+            className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" 
+          />
+          {errors.imageUrl && <p className="mt-1 text-xs text-red-400">{errors.imageUrl.message}</p>}
         </div>
         <div>
           <label htmlFor="rating" className="block text-sm font-medium text-red-500 font-montserrat">Rating</label>
-          <input type="number" name="rating" id="rating" value={movie && formData.rating} onChange={handleChange} min="1" max="10" step="0.1" placeholder="7.8" className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" />
+          <input 
+            type="number" 
+            id="rating" 
+            {...register('rating', { 
+              required: 'Rating is required',
+              min: { value: 0, message: 'Rating must be at least 0' },
+              max: { value: 10, message: 'Rating must be 10 or less' },
+              valueAsNumber: true
+            })} 
+            step="0.1" 
+            placeholder="7.8" 
+            className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" 
+          />
+          {errors.rating && <p className="mt-1 text-xs text-red-400">{errors.rating.message}</p>}
         </div>
         <div>
           <label htmlFor="genres" className="block text-sm font-medium text-red-500 font-montserrat">Genre</label>
-          <Select
-            inputId="genres"
-            isMulti
+          <Controller
             name="genres"
-            options={genreOptions}
-            styles={customStyles}
-            className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0"
-            onChange={handleGenreChange}
-            value={genreOptions.filter(option => formData.genres.includes(option.value))}
+            control={control}
+            rules={{ required: 'At least one genre is required' }}
+            render={({ field }) => (
+              <Select
+                {...field}
+                inputId="genres"
+                isMulti
+                options={genreOptions}
+                styles={customStyles}
+                className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0"
+                value={genreOptions.filter(option => field.value?.includes(option.value))}
+                onChange={(selectedOptions) => field.onChange(selectedOptions.map((option: any) => option.value))}
+              />
+            )}
           />
+          {errors.genres && <p className="mt-1 text-xs text-red-400">{errors.genres.message}</p>}
         </div>
         <div>
           <label htmlFor="duration" className="block text-sm font-medium text-red-500 font-montserrat">Runtime</label>
-          <input type="number" name="duration" id="duration" value={movie && formData.duration} onChange={handleChange} placeholder="minutes" className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" />
+          <input 
+            type="number" 
+            id="duration" 
+            {...register('duration', { 
+              required: 'Runtime is required',
+              min: { value: 1, message: 'Runtime must be at least 1 minute' },
+              valueAsNumber: true
+            })} 
+            placeholder="minutes" 
+            className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2" 
+          />
+          {errors.duration && <p className="mt-1 text-xs text-red-400">{errors.duration.message}</p>}
         </div>
         <div className="col-span-2">
           <label htmlFor="description" className="block text-sm font-medium text-red-500 font-montserrat">Overview</label>
-          <textarea name="description" id="description" value={formData.description} onChange={handleChange} rows={4} placeholder="Movie summary" className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2"></textarea>
+          <textarea 
+            id="description" 
+            {...register('description', { required: 'Overview is required' })} 
+            rows={4} 
+            placeholder="Movie summary" 
+            className="mt-1 block w-full rounded-md bg-gray-700 border-transparent focus:border-gray-500 focus:bg-gray-600 focus:ring-0 p-2"
+          />
+          {errors.description && <p className="mt-1 text-xs text-red-400">{errors.description.message}</p>}
         </div>
       </div>
       <div className="flex justify-end mt-4">

@@ -8,14 +8,25 @@ interface DialogProps {
   children: React.ReactNode;
   onClose: () => void;
   _disableFocusTrap?: boolean;
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
 }
 
-const Dialog: React.FC<DialogProps> = ({ title, children, onClose, _disableFocusTrap = false }) => {
+const Dialog: React.FC<DialogProps> = ({ title, children, onClose, _disableFocusTrap = false, maxWidth = 'md' }) => {
+  const maxWidthClasses = {
+    sm: 'max-w-sm',
+    md: 'max-w-md',
+    lg: 'max-w-lg',
+    xl: 'max-w-xl',
+    '2xl': 'max-w-2xl',
+    '3xl': 'max-w-3xl',
+    '4xl': 'max-w-4xl',
+  };
+
   return (
     <Portal>
       <FocusTrap active={!_disableFocusTrap}>
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className={`bg-gray-800 rounded-lg shadow-xl p-6 w-full ${maxWidthClasses[maxWidth]} max-h-[90vh] overflow-y-auto`}>
             <div className="flex justify-between items-center border-b pb-3">
               <h2 className="text-2xl font-medium text-white font-montserrat">{title}</h2>
               <button
